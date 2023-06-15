@@ -15,6 +15,7 @@ import com.azure.cosmos.models.CosmosDatabaseResponse;
 import com.azure.cosmos.models.CosmosItemRequestOptions;
 import com.azure.cosmos.models.CosmosItemResponse;
 import com.azure.cosmos.models.PartitionKey;
+import com.azure.cosmos.models.PartitionKeyBuilder;
 import com.azure.cosmos.models.CosmosQueryRequestOptions;
 import com.azure.cosmos.models.ThroughputProperties;
 import com.azure.cosmos.sample.common.AccountSettings;
@@ -185,6 +186,11 @@ public class SyncMain {
         //  Set query metrics enabled to get metrics around query executions
         queryOptions.setQueryMetricsEnabled(true);
 
+        // PartitionKey partitionKey = new PartitionKeyBuilder()
+        //     .add("1442174640") //AR_ID
+        //     .add("2023") //TXN_YEAR
+        //     .build();
+        // queryOptions.setPartitionKey(partitionKey);
         CosmosPagedIterable<Items> familiesPagedIterable = container.queryItems(
             "SELECT * FROM c where c.AR_ID = \"1442174640\" and c.TXN_YEAR = \"2023\"", queryOptions, Items.class);
 
