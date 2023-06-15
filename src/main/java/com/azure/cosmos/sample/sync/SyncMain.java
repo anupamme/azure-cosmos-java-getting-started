@@ -20,6 +20,7 @@ import com.azure.cosmos.models.ThroughputProperties;
 import com.azure.cosmos.sample.common.AccountSettings;
 import com.azure.cosmos.sample.common.Families;
 import com.azure.cosmos.sample.common.Family;
+import com.azure.cosmos.sample.common.Items;
 import com.azure.cosmos.util.CosmosPagedIterable;
 
 import java.time.Duration;
@@ -35,8 +36,8 @@ public class SyncMain {
 
     private CosmosClient client;
 
-    private final String databaseName = "AzureSampleFamilyDB";
-    private final String containerName = "FamilyContainer";
+    private final String databaseName = "db01";
+    private final String containerName = "hbase_tbl_01";
 
     private CosmosDatabase database;
     private CosmosContainer container;
@@ -81,8 +82,8 @@ public class SyncMain {
             .key(AccountSettings.MASTER_KEY)
             //  Setting the preferred location to Cosmos DB Account region
             //  West US is just an example. User should set preferred location to the Cosmos DB region closest to the application
-            .preferredRegions(Collections.singletonList("West US"))
-            .consistencyLevel(ConsistencyLevel.EVENTUAL)
+            // .preferredRegions(Collections.singletonList("Southeast Asia"))
+            // .consistencyLevel(ConsistencyLevel.EVENTUAL)
             .buildClient();
 
         //  </CreateSyncClient>
@@ -91,16 +92,16 @@ public class SyncMain {
         createContainerIfNotExists();
 
         //  Setup family items to create
-        ArrayList<Family> familiesToCreate = new ArrayList<>();
-        familiesToCreate.add(Families.getAndersenFamilyItem());
-        familiesToCreate.add(Families.getWakefieldFamilyItem());
-        familiesToCreate.add(Families.getJohnsonFamilyItem());
-        familiesToCreate.add(Families.getSmithFamilyItem());
+        // ArrayList<Family> familiesToCreate = new ArrayList<>();
+        // familiesToCreate.add(Families.getAndersenFamilyItem());
+        // familiesToCreate.add(Families.getWakefieldFamilyItem());
+        // familiesToCreate.add(Families.getJohnsonFamilyItem());
+        // familiesToCreate.add(Families.getSmithFamilyItem());
 
-        createFamilies(familiesToCreate);
+        // createFamilies(familiesToCreate);
 
         logger.info("Reading items.");
-        readItems(familiesToCreate);
+        // readItems(familiesToCreate);
 
         logger.info("Querying items.");
         queryItems();
@@ -184,8 +185,8 @@ public class SyncMain {
         //  Set query metrics enabled to get metrics around query executions
         queryOptions.setQueryMetricsEnabled(true);
 
-        CosmosPagedIterable<Family> familiesPagedIterable = container.queryItems(
-            "SELECT * FROM Family WHERE Family.lastName IN ('Andersen', 'Wakefield', 'Johnson')", queryOptions, Family.class);
+        CosmosPagedIterable<Items> familiesPagedIterable = container.queryItems(
+            "SELECT * FROM c where c.AR_ID = \"1442174640\" and c.TXN_YEAR = \"2023\"", queryOptions, Items.class);
 
         familiesPagedIterable.iterableByPage(10).forEach(cosmosItemPropertiesFeedResponse -> {
             logger.info("Got a page of query result with {} items(s) and request charge of {}",
@@ -194,7 +195,7 @@ public class SyncMain {
             logger.info("Item Ids {}", cosmosItemPropertiesFeedResponse
                 .getResults()
                 .stream()
-                .map(Family::getId)
+                .map(Items::getId)
                 .collect(Collectors.toList()));
         });
         //  </QueryItems>
