@@ -186,24 +186,27 @@ public class SyncMain {
         //  Set query metrics enabled to get metrics around query executions
         queryOptions.setQueryMetricsEnabled(true);
 
-        // PartitionKey partitionKey = new PartitionKeyBuilder()
-        //     .add("1442174640") //AR_ID
-        //     .add("2023") //TXN_YEAR
-        //     .build();
-        // queryOptions.setPartitionKey(partitionKey);
+        PartitionKey partitionKey = new PartitionKeyBuilder()
+            .add("5555555555") //AR_ID
+            .add("2021") //TXN_YEAR
+            .build();
+        queryOptions.setPartitionKey(partitionKey);
         CosmosPagedIterable<Items> familiesPagedIterable = container.queryItems(
-            "SELECT * FROM c where c.AR_ID = \"1442174640\" and c.TXN_YEAR = \"2023\"", queryOptions, Items.class);
+            "SELECT * FROM c where c.AR_ID = \"5555555555\" and c.TXN_YEAR = \"2021\"", queryOptions, Items.class);
 
-        familiesPagedIterable.iterableByPage(10).forEach(cosmosItemPropertiesFeedResponse -> {
-            logger.info("Got a page of query result with {} items(s) and request charge of {}",
-                    cosmosItemPropertiesFeedResponse.getResults().size(), cosmosItemPropertiesFeedResponse.getRequestCharge());
-
-            logger.info("Item Ids {}", cosmosItemPropertiesFeedResponse
-                .getResults()
-                .stream()
-                .map(Items::getId)
-                .collect(Collectors.toList()));
+        long startTime = System.nanoTime();
+        familiesPagedIterable.iterableByPage(2500).forEach(cosmosItemPropertiesFeedResponse -> {
+            // logger.info("Got a page of query result with {} items(s) and request charge of {}",
+            //         cosmosItemPropertiesFeedResponse.getResults().size(), cosmosItemPropertiesFeedResponse.getRequestCharge());
+            // logger.info("Item Ids {}", cosmosItemPropertiesFeedResponse
+            //     .getResults()
+            //     .stream()
+            //     .map(Items::getId)
+            //     .collect(Collectors.toList()));
         });
+        long stopTime = System.nanoTime();
+        long duration = (stopTime - startTime);
+        logger.info("Duration: {}", duration);
         //  </QueryItems>
     }
 }

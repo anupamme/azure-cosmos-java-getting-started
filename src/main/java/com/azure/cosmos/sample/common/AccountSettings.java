@@ -30,13 +30,13 @@ public class AccountSettings {
             System.getProperty("ACCOUNT_KEY", 
                     StringUtils.defaultString(StringUtils.trimToNull(
                             System.getenv().get("ACCOUNT_KEY")),
-                            ""));
+                            "WV07bRVW3TzznnJk6ipQWYTkeRoupNZa2uY2YQIWHGEazpOQuzM1wNHnSDfQPz7Rc1RzwzmyHid7ACDbjndPGg=="));
 
     public static String HOST =
             System.getProperty("ACCOUNT_HOST",
                     StringUtils.defaultString(StringUtils.trimToNull(
                             System.getenv().get("ACCOUNT_HOST")),
-                            ""));
+                            "https://kbankint01-dev-cosmos001.documents.azure.com:443/"));
 
 //     public static String MASTER_KEY =
 //             System.getProperty("ACCOUNT_KEY", 
